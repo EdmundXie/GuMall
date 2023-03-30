@@ -15,6 +15,10 @@
         <module>gumall-order</module>
         <module>gumall-product</module>
         <module>gumall-ware</module>
+        <module>renren-fast</module>
+        <module>renren-generator</module>
+        <module>gumall-common</module>
     </modules>
+
 
 </project>
