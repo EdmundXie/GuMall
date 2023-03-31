@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.10.10:8848
+    gateway:
+      routes:
+        - id: baidu_route
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baidu
+        - id: qq_route
+          uri: https://www.qq.com
+          predicates:
+            - Query=url,qq
+
+  application:
+    name: gumall-gateway
+server:
+  port: 88

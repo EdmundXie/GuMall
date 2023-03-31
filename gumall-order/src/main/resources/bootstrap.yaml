@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: gumall-order
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.10.10:8848

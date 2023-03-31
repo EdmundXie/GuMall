@@ -18,6 +18,7 @@
         <module>renren-fast</module>
         <module>renren-generator</module>
         <module>gumall-common</module>
+        <module>gumall-gateway</module>
     </modules>
 
 
