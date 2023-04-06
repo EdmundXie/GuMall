@@ -19,5 +19,14 @@ public interface CategoryService extends IService<CategoryEntity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<CategoryEntity> listWithTree();
+
+    /*
+     * 逻辑删除：
+     * 1.在yml的Myatis-Plus中配置
+     * 2.配置全局的逻辑删除规则（省略）
+     * 3.配置逻辑删除组件的bean（省略）
+     * 4.在entity表中的某一属性加上逻辑删除@TableLogic的注解
+     */
+    void removeMenuByIds(List<Long> ids);
 }
 

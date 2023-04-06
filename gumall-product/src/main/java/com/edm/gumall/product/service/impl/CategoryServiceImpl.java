@@ -51,6 +51,23 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         return categories;
     }
 
+    /*
+     * 根据Id删除菜单，所删除的菜单需要没有子菜单
+     */
+    @Override
+    public void removeMenuByIds(List<Long> ids) {
+        //TODO //检查当前删除的菜单是否被别的地方引用
+
+        //1. 检查是否有子菜单
+
+        //2. 没有子菜单，检查是否有父菜单
+        //2.1 有父菜单，找到在父菜单里删除本条子菜单
+
+        //3. 没有父菜单直接删除
+        //逻辑删除
+        this.removeByIds(ids);
+    }
+
     //递归查找所有Children
     public List<CategoryEntity> getChildren(CategoryEntity parent,List<CategoryEntity> categories){
         return categories.stream()

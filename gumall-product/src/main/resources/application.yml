@@ -15,5 +15,10 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
 server:
   port: 10000
+logging: #调整控制台输出日志，包含sql语句
+  level:
+    com.edm.gumall: debug

@@ -17,12 +17,12 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 @Configuration
 public class CorsConfig {
 
-    @Bean
-    public CorsWebFilter corsWebFilter(){
-        UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-
-        configurationSource.registerCorsConfiguration("/**",corsConfiguration);
-        return new CorsWebFilter(configurationSource);
-    }
+//    @Bean
+//    public CorsWebFilter corsWebFilter(){
+//        UrlBasedCorsConfigurationSource configurationSource = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//
+//        configurationSource.registerCorsConfiguration("/**",corsConfiguration);
+//        return new CorsWebFilter(configurationSource);
+//    }
 }
