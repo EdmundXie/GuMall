@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: gumall-gateway
-  cloud:
-    nacos:
-      config:
-        server-addr: 192.168.10.10:8848
-        namespace: 2bd8710c-4f58-4038-b853-f6e3e3592237

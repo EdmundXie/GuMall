@@ -9,27 +9,33 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.edm.gumall</groupId>
-	<artifactId>gumall-gateway</artifactId>
+	<artifactId>gumall-third-party</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>gumall-gateway</name>
-	<description>gumall-gateway</description>
+	<name>gumall-third-party</name>
+	<description>gumall-third-party</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>Greenwich.SR3</spring-cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.edm.gumall</groupId>
+			<artifactId>gumall-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.baomidou</groupId>
+					<artifactId>mybatis-plus-boot-starter</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba.cloud</groupId>
-			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-		</dependency>
-		<!--        配置中心来做配置管理-->
-		<dependency>
-			<groupId>com.alibaba.cloud</groupId>
-			<artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -37,9 +43,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.dukescript.api</groupId>
-			<artifactId>junit-browser-runner</artifactId>
-			<version>1.0</version>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alicloud-oss</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.dukescript.api</groupId>

@@ -1,7 +1,0 @@
-spring:
-  application:
-    name: gumall-member
-  cloud:
-    nacos:
-      config:
-        server-addr: 192.168.10.10:8848

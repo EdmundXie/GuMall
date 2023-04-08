@@ -19,7 +19,20 @@
         <module>renren-generator</module>
         <module>gumall-common</module>
         <module>gumall-gateway</module>
+        <module>gumall-third-party</module>
     </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.dukescript.api</groupId>
+            <artifactId>junit-browser-runner</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.dukescript.api</groupId>
+            <artifactId>junit-browser-runner</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
