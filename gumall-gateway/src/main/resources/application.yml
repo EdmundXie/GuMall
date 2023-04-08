@@ -1,0 +1,53 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.10.10:8848
+    gateway:
+      routes:
+        - id: baidu_route
+          uri: https://www.baidu.com
+          predicates:
+            - Query=url,baidu
+        - id: qq_route
+          uri: https://www.qq.com
+          predicates:
+            - Query=url,qq
+
+        - id: product_route
+          uri: lb://gumall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/$\{segment}
+
+        - id: third_party_route
+          uri: lb://gumall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
+
+
+      globalcors: #全局的跨域处理
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*" #允许来自哪里的跨域的请求
+            allowedMethods: "*" #请求方式
+            allowedHeaders: "*"  #请求头
+            allowCredentials: true #是否携带cookie
+            maxAge: 360000 #本次跨域检测的有效期
+
+  ##前端项目,/api
+  application:
+    name: gumall-gateway
+server:
+  port: 88

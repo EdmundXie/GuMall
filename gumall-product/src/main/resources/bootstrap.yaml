@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: gumall-product
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.10.10:8848
+        namespace: 90b4a8ec-711c-4c56-9eb2-df7f4678378e
