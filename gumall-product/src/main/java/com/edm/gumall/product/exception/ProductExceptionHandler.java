@@ -33,8 +33,8 @@ public class ProductExceptionHandler {
         Map<String,String> resultMap = new HashMap<>();
         bindingResult.getFieldErrors().forEach((item)->{
             String code = item.getCode();
-            String field = item.getField();
-            resultMap.put(code,field);
+            String message = item.getDefaultMessage();
+            resultMap.put(code,message);
         });
         return R.error(BizCodeEnum.INVALID_EXCEPTION.getCode(), BizCodeEnum.INVALID_EXCEPTION.getMsg()).put("data",resultMap);
     }
@@ -42,8 +42,9 @@ public class ProductExceptionHandler {
     /*
      * 处理未知异常
      */
-    @ExceptionHandler(Exception.class)
-    public R handleUnknownException(Exception e){
+    @ExceptionHandler(Throwable.class)
+    public R handleUnknownException(Throwable throwable){
+        log.error("Error: ",throwable);
         return R.error(BizCodeEnum.UNKNOWN_EXCEPTION.getCode(), BizCodeEnum.UNKNOWN_EXCEPTION.getMsg());
     }
 }

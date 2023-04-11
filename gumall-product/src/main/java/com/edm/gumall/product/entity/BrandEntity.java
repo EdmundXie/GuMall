@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
-import java.util.Date;
+
+import com.edm.common.valid.AddGroup;
+import com.edm.common.valid.ListValue;
+import com.edm.common.valid.UpdateGroup;
 import lombok.Data;
 import org.hibernate.validator.constraints.URL;
 
@@ -26,17 +29,19 @@ public class BrandEntity implements Serializable {
 	 * 品牌id
 	 */
 	@TableId
+	@Null(message = "Add brand must not contain Id",groups = {AddGroup.class})
+	@NotNull(message = "Update brand must contain Id",groups = {UpdateGroup.class})
 	private Long brandId;
 	/**
 	 * 品牌名
 	 */
-	@NotBlank(message = "brand name can't be empty")
+	@NotBlank(message = "Brand name can't be empty", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * 品牌logo地址
 	 */
-	@NotEmpty
-	@URL(message = "must be a valid url")
+	@NotEmpty(message = "Logo can't be empty", groups = {AddGroup.class})
+	@URL(message = "Url must be valid", groups = {AddGroup.class, UpdateGroup.class})
 	private String logo;
 	/**
 	 * 介绍
@@ -45,18 +50,19 @@ public class BrandEntity implements Serializable {
 	/**
 	 * 显示状态[0-不显示；1-显示]
 	 */
+	@ListValue(vals={0,1},groups = {AddGroup.class})
 	private Integer showStatus;
 	/**
 	 * 检索首字母
 	 */
-	@NotEmpty
-	@Pattern(regexp = "^[a-zA-Z]$",message = "first letter must be an English letter")
+	@NotEmpty(message = "FirstLetter can't be empty", groups = {AddGroup.class})
+	@Pattern(regexp = "^[a-zA-Z]$",message = "First letter must be an English letter", groups = {AddGroup.class, UpdateGroup.class})
 	private String firstLetter;
 	/**
 	 * 排序
 	 */
-	@NotNull
-	@Min(value = 0,message = "sort must be a positive integer")
+	@NotNull(message = "Sort can't be null", groups = {AddGroup.class})
+	@Min(value = 0,message = "Sort must be a positive integer", groups = {AddGroup.class, UpdateGroup.class})
 	private Integer sort;
 
 }
