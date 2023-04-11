@@ -1,6 +1,6 @@
 # Gumall - E-commerce Platform with Distributed Architecture
 
-![](/Users/edmundxie/Downloads/gumall/assets/building-passing-green.svg)[![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)![jdk](https://img.shields.io/static/v1?label=JDK&message=11&color=blue)![Cocoapods platforms](https://img.shields.io/badge/SpringBoot-2.1.8%20RELEASE-green)![Cocoapods platforms](https://img.shields.io/badge/SpringCloud-Greenwich.SR3-green)
+![](/Users/edmundxie/Downloads/gumall/assets/building-passing-green.svg)   [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)   ![jdk](https://img.shields.io/static/v1?label=JDK&message=11&color=blue)   ![Cocoapods platforms](https://img.shields.io/badge/SpringBoot-2.1.8%20RELEASE-green)   ![Cocoapods platforms](https://img.shields.io/badge/SpringCloud-Greenwich.SR3-green)
 
 ## Introduction
 Gumall is an e-commerce platform that has been developed with a distributed architecture using Spring Boot and Spring Cloud. The platform uses Docker to manage multiple middleware and Nginx for dynamic and static separation of resources, reverse proxy, and load balancing.
