@@ -13,6 +13,7 @@ Gumall has implemented generating/cancelling order and locking/unlocking invento
 
 Furthermore, Gumall has completed product flash sale using Redisson distributed lock - Semaphore and MQ, which can process 50,000 QPS in one Tomcat server.
 
+
 ## Tech Stack
 
 ### Main Stack
@@ -47,10 +48,14 @@ To run Gumall, you need to have Docker installed on your system. Once Docker is 
 docker-compose up -d
 ```
 
+### Admin system
 This command will start all the required services for Gumall. Once the services are up and running, you can access the admin platform by visiting the following URL:
 ```
 http://localhost:8001/#/login
 ```
+## Flowcharts
+### Main flow chart
+![img.png](assets/framework.png)
 
 ## Conclusion
 Gumall is an e-commerce platform that has been developed with a distributed architecture to solve the problems faced by a highly concurrent distributed system. It uses various technologies such as Spring Boot, Spring Cloud, Docker, Nginx, Nacos, Gateway, Feign, Ribbon, Sentinel, Sleuth, Zipkin, Spring Cache, Redis, Elasticsearch, RabbitMQ, and Redisson to provide a reliable and performant platform.
