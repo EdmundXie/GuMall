@@ -1,4 +1,4 @@
-# Gumall - E-commerce Platform with Distributed Architecture
+# Gumall — E-commerce Platform with Distributed Architecture
 
 ![](/Users/edmundxie/Downloads/gumall/assets/building-passing-green.svg)   [![License](https://img.shields.io/badge/license-Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)   ![jdk](https://img.shields.io/static/v1?label=JDK&message=11&color=blue)   ![Cocoapods platforms](https://img.shields.io/badge/SpringBoot-2.1.8%20RELEASE-green)   ![Cocoapods platforms](https://img.shields.io/badge/SpringCloud-Greenwich.SR3-green)
 
@@ -14,6 +14,31 @@ Gumall has implemented generating/cancelling order and locking/unlocking invento
 Furthermore, Gumall has completed product flash sale using Redisson distributed lock - Semaphore and MQ, which can process 50,000 QPS in one Tomcat server.
 
 ## Tech Stack
+
+### Main Stack
+
+| Services | Used Technologies                                     |
+| -------- | -------- |
+| Login | SMS, SSO single sign-on, social, interceptor with threadlocal, distributed session |
+| Product Listing | Elasticsearch, Aliyun OSS |
+| Seckill     | Timed tasks, Redis semaphore |
+| Product search | Elasticsearch         |
+| Cart         |  Redis        |
+| Order        |  Mysql, Redis        |
+| Warehouse    |  Mysql, Redis        |
+
+
+### Other Services
+| Tools | Used tools                                     |
+| -------- | -------- |
+| UserInteface | ES6, Vue.js, ElementUI |
+| Cluster Deployment | Jenkins, Kubernetes |
+| ELK | LogStash |
+| Flow Control | Sentinel |
+| Extended Certification and Authorisation | Spring Security |
+| Visualisation | Prometheus and Grafana|
+| Documents | swagger |
+
 
 ## How to run
 To run Gumall, you need to have Docker installed on your system. Once Docker is installed, you can use the following command to run Gumall:
