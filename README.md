@@ -53,6 +53,17 @@ This command will start all the required services for Gumall. Once the services 
 ```
 http://localhost:8001/#/login
 ```
+## System Design
+### Product Manage System (PMS)
+Due to the specificity of the e-commerce product, we have quoted the design solution provided by Alibaba. The products are divided into SPUs and SKUs. for more details see:  <a herf="https://topic.alibabacloud.com/a/difference-between-product-and-commodity-sku-spu-whats-the-key-attribute-whats-the-product-attribute_8_8_10239646.html"> Difference between product and commodity SKU SPU </a> .Below is a detailed explanation of the concepts as well as the relationship between the two, as well as an explanation of the PMS design.
+
+* **Sales Attribute**: The different attribute values of the sales attributes of a product will lead to differences in the sales price of this product. e.g. iPhone 12 Pro Max 256GB and iPhone 12 Pro Max 512GB have a different sales price. So "capacity" is a sales attribute
+* **Regular Attribute**: It will not affect the price of the product, like the length, weight, ppi of iPhone 12 Pro Max.
+* **SPU (Standard Product Unit)**: It is a type of goods, such as a type of iPhone, like iPhone 12 Pro Max.
+* **SKU (Stock Keeping Unit)**: To save the smallest available unit of inventory control. It is a specific product unit based on the SPU, like iPhone 12 Pro Max Gold+256GB, iPhone 12 Pro Max Gold+512GB, iPhone 12 Pro Max Blue+256GB, iPhone 12 Pro Max Sliver+512GB. i.e. SKU is a combination of various Sales Attributes (color + capacity) of the SPU.
+
+![img.png](assets/PMS-ERDirgram.png)
+
 ## Flowcharts
 ### Main flow chart
 ![img.png](assets/framework.png)
