@@ -15,6 +15,7 @@ Furthermore, Gumall has completed product flash sale using Redisson distributed 
 
 
 ## Tech Stack
+![img.png](assets/Architecture.png)
 
 ### Main Stack
 
