@@ -1,12 +1,13 @@
 package com.edm.gumall.product.service.impl;
 
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.edm.gumall.product.entity.CategoryBrandRelationEntity;
+import com.edm.gumall.product.service.CategoryBrandRelationService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,10 +19,16 @@ import com.edm.common.utils.Query;
 import com.edm.gumall.product.dao.CategoryDao;
 import com.edm.gumall.product.entity.CategoryEntity;
 import com.edm.gumall.product.service.CategoryService;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Resource
+    CategoryBrandRelationService categoryBrandRelationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -68,6 +75,22 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         this.removeByIds(ids);
     }
 
+    @Override
+    public Long[] getPath(Long catlogId) {
+        List<Long> path = new ArrayList<>();
+        getParent(catlogId,path);
+        Collections.reverse(path);
+        return path.toArray(new Long[0]);
+    }
+
+    public void getParent(Long catelogId, List<Long> path){
+        path.add(catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            getParent(byId.getParentCid(),path);
+        }
+    }
+
     //递归查找所有Children
     public List<CategoryEntity> getChildren(CategoryEntity parent,List<CategoryEntity> categories){
         return categories.stream()
@@ -79,5 +102,18 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
                     return sort1-sort2;
                 })
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    @Override
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        if(!StringUtils.isEmpty(category.getName())){
+
+            //更新categoryBrandRelationService
+            categoryBrandRelationService.updateCatlogName(category.getCatId(),category.getName());
+
+            //TODO 其他冗余表的更新
+        }
     }
 }

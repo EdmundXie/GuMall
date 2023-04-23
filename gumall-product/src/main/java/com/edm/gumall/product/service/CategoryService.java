@@ -28,5 +28,11 @@ public interface CategoryService extends IService<CategoryEntity> {
      * 4.在entity表中的某一属性加上逻辑删除@TableLogic的注解
      */
     void removeMenuByIds(List<Long> ids);
+
+    //找到catlogId的完整路径
+    //[父/子/孙子]
+    Long[] getPath(Long catlogId);
+
+    void updateCascade(CategoryEntity category);
 }
 
