@@ -3,6 +3,8 @@ package com.edm.gumall.product.controller;
 import java.util.Arrays;
 import java.util.Map;
 
+import com.edm.gumall.product.vo.AttrRespVo;
+import com.edm.gumall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,16 @@ import com.edm.common.utils.R;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+    /**
+     * 基本信息列表
+     */
+    @RequestMapping("/base/list/{catlogId}")
+    //@RequiresPermissions("product:attr:list")
+    public R baseList(@RequestParam Map<String, Object> params,@PathVariable Long catlogId){
+        PageUtils page = attrService.queryBaseAttrPage(params,catlogId);
+
+        return R.ok().put("page", page);
+    }
 
     /**
      * 列表
@@ -48,9 +60,9 @@ public class AttrController {
     @RequestMapping("/info/{attrId}")
     //@RequiresPermissions("product:attr:info")
     public R info(@PathVariable("attrId") Long attrId){
-		AttrEntity attr = attrService.getById(attrId);
+		AttrRespVo attrRespVo = attrService.getAttrInfo(attrId);
 
-        return R.ok().put("attr", attr);
+        return R.ok().put("attr", attrRespVo);
     }
 
     /**
@@ -58,8 +70,8 @@ public class AttrController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:attr:save")
-    public R save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
+    public R save(@RequestBody AttrVo attr){
+		attrService.saveAttrVo(attr);
 
         return R.ok();
     }
@@ -69,8 +81,8 @@ public class AttrController {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("product:attr:update")
-    public R update(@RequestBody AttrEntity attr){
-		attrService.updateById(attr);
+    public R update(@RequestBody AttrVo attr){
+		attrService.updateAttrVo(attr);
 
         return R.ok();
     }
