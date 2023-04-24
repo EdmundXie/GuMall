@@ -32,15 +32,16 @@ public class AttrController {
     @Autowired
     private AttrService attrService;
     /**
-     * 基本信息列表
+     * 规格参数/销售属性列表
      */
-    @RequestMapping("/base/list/{catlogId}")
+    @RequestMapping("/{attrType}/list/{catlogId}")
     //@RequiresPermissions("product:attr:list")
-    public R baseList(@RequestParam Map<String, Object> params,@PathVariable Long catlogId){
-        PageUtils page = attrService.queryBaseAttrPage(params,catlogId);
+    public R baseList(@RequestParam Map<String, Object> params,@PathVariable String attrType,@PathVariable Long catlogId){
+        PageUtils page = attrService.queryBaseAttrPage(params,catlogId, attrType);
 
         return R.ok().put("page", page);
     }
+
 
     /**
      * 列表

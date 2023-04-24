@@ -2,7 +2,7 @@ package com.edm.gumall.product.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.edm.common.constant.ProductConstant;
 import com.edm.gumall.product.entity.AttrAttrgroupRelationEntity;
 import com.edm.gumall.product.entity.AttrGroupEntity;
 import com.edm.gumall.product.entity.CategoryEntity;
@@ -66,17 +66,23 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         this.save(attrEntity);
 
         //2. 保存关联关系
-        AttrAttrgroupRelationEntity relation = new AttrAttrgroupRelationEntity();
-        relation.setAttrGroupId(attr.getAttrGroupId());
-        relation.setAttrId(attrEntity.getAttrId());
-        relationService.save(relation);
+        if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){
+            AttrAttrgroupRelationEntity relation = new AttrAttrgroupRelationEntity();
+            relation.setAttrGroupId(attr.getAttrGroupId());
+            relation.setAttrId(attrEntity.getAttrId());
+            relationService.save(relation);
+        }
     }
 
     @Override
-    public PageUtils queryBaseAttrPage(Map<String, Object> params, Long catlogId) {
+    public PageUtils queryBaseAttrPage(Map<String, Object> params, Long catlogId, String attrType) {
         //Page中有关键字搜索
         String key = (String) params.get("key");
         LambdaQueryWrapper<AttrEntity> wrapper = new LambdaQueryWrapper<>();
+
+        if(attrType!=null){
+            wrapper.eq(AttrEntity::getAttrType,"base".equalsIgnoreCase(attrType)?ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode():ProductConstant.AttrEnum.ATTR_TYPE_SALE.getCode());
+        }
         //AttrGroupId与关键字相同或AttrGroupName与关键字相似where name like %key%
         if(!StringUtils.isEmpty(key))
         {
@@ -106,17 +112,18 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
                 attrRespVo.setCatelogName(category.getName());
             }
 
-            //2.1 先得到AttrAttrgroupRelationEntity对象
-            LambdaQueryWrapper<AttrAttrgroupRelationEntity> relationEntityLambdaQueryWrapper = new LambdaQueryWrapper<>();
-            relationEntityLambdaQueryWrapper.eq(item.getAttrId()!=null,AttrAttrgroupRelationEntity::getAttrId,item.getAttrId());
-            AttrAttrgroupRelationEntity relationEntity = relationService.getOne(relationEntityLambdaQueryWrapper);
+            if("base".equalsIgnoreCase(attrType)){
+                //2.1 先得到AttrAttrgroupRelationEntity对象
+                LambdaQueryWrapper<AttrAttrgroupRelationEntity> relationEntityLambdaQueryWrapper = new LambdaQueryWrapper<>();
+                relationEntityLambdaQueryWrapper.eq(item.getAttrId()!=null,AttrAttrgroupRelationEntity::getAttrId,item.getAttrId());
+                AttrAttrgroupRelationEntity relationEntity = relationService.getOne(relationEntityLambdaQueryWrapper);
 
-            //2.2 根据AttrAttrgroupRelationEntity中的attrGroupId查attrGroupName
-            if(relationEntity!=null&&relationEntity.getAttrGroupId()!=null){
-                AttrGroupEntity attrGroup = attrGroupService.getById(relationEntity.getAttrGroupId());
-                attrRespVo.setGroupName(attrGroup.getAttrGroupName());
+                //2.2 根据AttrAttrgroupRelationEntity中的attrGroupId查attrGroupName
+                if(relationEntity!=null&&relationEntity.getAttrGroupId()!=null){
+                    AttrGroupEntity attrGroup = attrGroupService.getById(relationEntity.getAttrGroupId());
+                    attrRespVo.setGroupName(attrGroup.getAttrGroupName());
+                }
             }
-
             return attrRespVo;
         }).collect(Collectors.toList());
         PageUtils pageUtils = new PageUtils(page);
@@ -190,4 +197,5 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         }
         relationService.saveOrUpdate(relation,wrapper);
     }
+
 }
