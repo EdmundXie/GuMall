@@ -6,6 +6,7 @@ import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.vo.AttrRespVo;
 import com.edm.gumall.product.vo.AttrVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,5 +28,6 @@ public interface AttrService extends IService<AttrEntity> {
 
     void updateAttrVo(AttrVo attr);
 
+    PageUtils getAttrPageWithoutThese(Map<String, Object> params,List<Long> ids);
 }
 

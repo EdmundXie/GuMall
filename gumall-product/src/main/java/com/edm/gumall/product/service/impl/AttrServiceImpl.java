@@ -198,4 +198,14 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         relationService.saveOrUpdate(relation,wrapper);
     }
 
+    @Override
+    public PageUtils getAttrPageWithoutThese(Map<String, Object> params,List<Long> ids) {
+        LambdaQueryWrapper<AttrEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.notIn(!ids.isEmpty(),AttrEntity::getAttrId,ids).eq(AttrEntity::getAttrType,ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode());
+        IPage<AttrEntity> page = this.page(
+                new Query<AttrEntity>().getPage(params),
+                wrapper
+        );
+        return new PageUtils(page);
+    }
 }

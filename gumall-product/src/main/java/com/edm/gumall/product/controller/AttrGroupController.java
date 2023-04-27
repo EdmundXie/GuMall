@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.edm.gumall.product.entity.AttrAttrgroupRelationEntity;
 import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.service.AttrAttrgroupRelationService;
@@ -48,7 +49,31 @@ public class AttrGroupController {
     @Resource
     private AttrService attrService;
 
-    /*
+    /**
+     * 获取属性分组没有关联的其他属性
+     * /product/attrgroup/{attrgroupId}/noattr/relation
+     */
+    @RequestMapping("/{attrgroupId}/noattr/relation")
+    public R getAttrWithoutRelation(@RequestParam Map<String, Object> params, @PathVariable Long attrgroupId){
+        PageUtils page = attrGroupService.queryPageWithoutRelation(params,attrgroupId);
+        return R.ok().put("page",page);
+    }
+
+    /**
+     * 获取属性分组的关联的所有属性
+     * /product/attrgroup/{attrgroupId}/attr/relation
+     */
+    @RequestMapping("/{attrgroupId}/attr/relation")
+    public R getAttr(@PathVariable Long attrgroupId){
+        List<Long> ids= attrAttrgroupRelationService.getAttrIdsByGroupId(attrgroupId);
+        List<AttrEntity> attrs = new ArrayList<>();
+        if(!ids.isEmpty()){
+            attrs = (List<AttrEntity>) attrService.listByIds(ids);
+        }
+        return R.ok().put("data",attrs);
+    }
+
+    /**
      * 删除属性与分组的关联关系
      * /product/attrgroup/attr/relation/delete
      */
@@ -68,19 +93,7 @@ public class AttrGroupController {
         return R.ok().put("page", page);
     }
 
-    /*
-     * 获取属性分组的关联的所有属性
-     * /product/attrgroup/{attrgroupId}/attr/relation
-     */
-    @RequestMapping("/{attrgroupId}/attr/relation")
-    public R getAllAttr(@PathVariable Long attrgroupId){
-        List<Long> ids= attrAttrgroupRelationService.getAttrIdsByGroupId(attrgroupId);
-        List<AttrEntity> attrs = new ArrayList<>();
-        if(!ids.isEmpty()){
-            attrs = (List<AttrEntity>) attrService.listByIds(ids);
-        }
-        return R.ok().put("data",attrs);
-    }
+
 
     /**
      * 信息
