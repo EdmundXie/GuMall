@@ -13,11 +13,7 @@ import com.edm.gumall.product.service.AttrService;
 import com.edm.gumall.product.service.CategoryService;
 import com.edm.gumall.product.vo.AttrGroupRelationVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.edm.gumall.product.entity.AttrGroupEntity;
 import com.edm.gumall.product.service.AttrGroupService;
@@ -48,6 +44,16 @@ public class AttrGroupController {
 
     @Resource
     private AttrService attrService;
+
+    /**
+     * 添加属性与分组关联关系
+     * /product/attrgroup/attr/relation
+     */
+    @PostMapping("/attr/relation")
+    public R addAttrAttrGroupRelation(@RequestBody List<AttrGroupRelationVo> relationVos){
+        attrAttrgroupRelationService.saveBatch(relationVos);
+        return R.ok();
+    }
 
     /**
      * 获取属性分组没有关联的其他属性

@@ -3,6 +3,8 @@ package com.edm.gumall.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.service.AttrGroupService;
+import com.edm.gumall.product.vo.AttrGroupRelationVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -60,5 +62,16 @@ public class AttrAttrgroupRelationServiceImpl extends ServiceImpl<AttrAttrgroupR
                     .or();
         }
         this.remove(wrapper);
+    }
+
+    @Override
+    public void saveBatch(List<AttrGroupRelationVo> relationVos) {
+        List<AttrAttrgroupRelationEntity> collect = relationVos.stream().map((item) -> {
+            AttrAttrgroupRelationEntity relation = new AttrAttrgroupRelationEntity();
+            BeanUtils.copyProperties(item, relation);
+            return relation;
+        }).collect(Collectors.toList());
+
+        this.saveBatch(collect);
     }
 }

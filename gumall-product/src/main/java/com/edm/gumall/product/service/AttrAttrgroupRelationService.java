@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.edm.common.utils.PageUtils;
 import com.edm.gumall.product.entity.AttrAttrgroupRelationEntity;
 import com.edm.gumall.product.entity.AttrEntity;
+import com.edm.gumall.product.vo.AttrGroupRelationVo;
 
 import java.util.List;
 import java.util.Map;
@@ -22,5 +23,7 @@ public interface AttrAttrgroupRelationService extends IService<AttrAttrgroupRela
     List<Long> getAttrIdsByGroupId(Long attrgroupId);
 
     void deleteBatch(List<AttrAttrgroupRelationEntity> relationEntities);
+
+    void saveBatch(List<AttrGroupRelationVo> relationVos);
 }
 
