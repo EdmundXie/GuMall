@@ -99,7 +99,7 @@ public class CategoryBrandRelationController {
      * 获取分类关联的品牌
      */
     @GetMapping("/brands/list")
-    public R brandsList(@RequestParam Long catId){
+    public R brandsList(@RequestParam(required = true, defaultValue = "0") Long catId){
         LambdaQueryWrapper<CategoryBrandRelationEntity> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(!(catId ==null),CategoryBrandRelationEntity::getCatelogId,catId);
         List<CategoryBrandRelationEntity> data = categoryBrandRelationService.list(wrapper);

@@ -55,4 +55,8 @@ public class AttrVo {
      * 分组id
      */
     private Long attrGroupId;
+    /**
+     * 值类型, 是否需要检索[0-多选，1-单选]
+     */
+    private Integer valueType;
 }
