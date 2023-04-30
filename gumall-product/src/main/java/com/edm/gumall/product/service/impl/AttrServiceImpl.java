@@ -66,7 +66,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         this.save(attrEntity);
 
         //2. 保存关联关系
-        if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){
+        if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attr.getAttrGroupId()!=null){
             AttrAttrgroupRelationEntity relation = new AttrAttrgroupRelationEntity();
             relation.setAttrGroupId(attr.getAttrGroupId());
             relation.setAttrId(attrEntity.getAttrId());

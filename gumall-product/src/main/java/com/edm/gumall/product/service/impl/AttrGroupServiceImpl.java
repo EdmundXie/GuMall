@@ -6,6 +6,7 @@ import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.service.AttrAttrgroupRelationService;
 import com.edm.gumall.product.service.AttrService;
 import com.edm.gumall.product.vo.AttrGroupRelationVo;
+import com.edm.gumall.product.vo.AttrGroupWithAttrsVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -101,5 +102,32 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
         List<Long> ids = new ArrayList<>(idSet);
         //2.3 从当前分类的属性中移除这些属性
         return attrService.getAttrPageWithoutThese(params,ids);
+    }
+
+    @Override
+    public List<AttrEntity> getAttrsWithAttrGroupId(Long attrgroupId) {
+        List<Long> ids= attrAttrgroupRelationService.getAttrIdsByGroupId(attrgroupId);
+        List<AttrEntity> attrs = new ArrayList<>();
+        if(!ids.isEmpty()){
+            attrs = (List<AttrEntity>) attrService.listByIds(ids);
+        }
+        return attrs;
+    }
+
+    @Override
+    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(Long catelogId) {
+        LambdaQueryWrapper<AttrGroupEntity> attrGroupWrapper = new LambdaQueryWrapper<>();
+        attrGroupWrapper.eq(catelogId!=null,AttrGroupEntity::getCatelogId,catelogId);
+        List<AttrGroupEntity> attrGroupEntities = this.list(attrGroupWrapper);
+
+        List<AttrGroupWithAttrsVo> vos = attrGroupEntities.stream().map((attr) -> {
+            AttrGroupWithAttrsVo attrGroupWithAttrsVo = new AttrGroupWithAttrsVo();
+            BeanUtils.copyProperties(attr,attrGroupWithAttrsVo);
+
+            List<AttrEntity> attrs = this.getAttrsWithAttrGroupId(attr.getAttrGroupId());
+            attrGroupWithAttrsVo.setAttrs(attrs);
+            return attrGroupWithAttrsVo;
+        }).collect(Collectors.toList());
+        return vos;
     }
 }

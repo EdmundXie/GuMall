@@ -12,6 +12,7 @@ import com.edm.gumall.product.service.AttrAttrgroupRelationService;
 import com.edm.gumall.product.service.AttrService;
 import com.edm.gumall.product.service.CategoryService;
 import com.edm.gumall.product.vo.AttrGroupRelationVo;
+import com.edm.gumall.product.vo.AttrGroupWithAttrsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +47,16 @@ public class AttrGroupController {
     private AttrService attrService;
 
     /**
+     * 获取分类下所有分组&关联属性
+     * /product/attrgroup/{catelogId}/withattr
+     */
+    @GetMapping("/{catelogId}/withattr")
+    public R getAttrGroupWithAttr(@PathVariable Long catelogId){
+        List<AttrGroupWithAttrsVo> data= attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data",data);
+    }
+
+    /**
      * 添加属性与分组关联关系
      * /product/attrgroup/attr/relation
      */
@@ -71,11 +82,7 @@ public class AttrGroupController {
      */
     @RequestMapping("/{attrgroupId}/attr/relation")
     public R getAttr(@PathVariable Long attrgroupId){
-        List<Long> ids= attrAttrgroupRelationService.getAttrIdsByGroupId(attrgroupId);
-        List<AttrEntity> attrs = new ArrayList<>();
-        if(!ids.isEmpty()){
-            attrs = (List<AttrEntity>) attrService.listByIds(ids);
-        }
+        List<AttrEntity> attrs = attrGroupService.getAttrsWithAttrGroupId(attrgroupId);
         return R.ok().put("data",attrs);
     }
 
