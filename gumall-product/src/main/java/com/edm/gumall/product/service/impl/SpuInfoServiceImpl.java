@@ -1,8 +1,10 @@
 package com.edm.gumall.product.service.impl;
 
 import com.alibaba.nacos.client.utils.StringUtils;
+import com.edm.common.to.SpuBoundTo;
 import com.edm.common.utils.R;
 import com.edm.gumall.product.entity.*;
+import com.edm.gumall.product.feign.CouponFeignService;
 import com.edm.gumall.product.service.*;
 import com.edm.gumall.product.vo.*;
 import org.springframework.beans.BeanUtils;
@@ -48,6 +50,9 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Resource
     ProductAttrValueService attrValueService;
+
+    @Resource
+    CouponFeignService couponFeignService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         IPage<SpuInfoEntity> page = this.page(
