@@ -1,6 +1,8 @@
 package com.edm.gumall.product.service.impl;
 
 import com.alibaba.nacos.client.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.edm.common.to.SkuReductionTo;
 import com.edm.common.to.SpuBoundTo;
 import com.edm.common.utils.R;
 import com.edm.gumall.product.entity.*;
@@ -10,6 +12,7 @@ import com.edm.gumall.product.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -153,7 +156,6 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
                 }).collect(Collectors.toList());
                 //5.2）、sku的图片信息；pms_sku_image
                 skuImagesService.saveBatch(imagesEntities);
-                //TODO 没有图片路径的无需保存
 
                 List<Attr> attr = item.getAttr();
                 List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = attr.stream().map(a -> {
@@ -185,5 +187,28 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     @Override
     public void saveBaseSpuInfo(SpuInfoEntity infoEntity) {
         this.save(infoEntity);
+    }
+
+    @Override
+    public PageUtils queryPageByCondition(Map<String, Object> params) {
+        LambdaQueryWrapper<SpuInfoEntity> wrapper = new LambdaQueryWrapper<>();
+        String key = (String) params.get("key");
+        String status = (String) params.get("status");
+        String brandId = (String) params.get("brandId");
+        String catelogId = (String) params.get("catelogId");
+        if(!StringUtils.isEmpty(key)){
+            wrapper.and(wp -> wp.eq(SpuInfoEntity::getId,key).or().like(SpuInfoEntity::getSpuName,key));
+        }
+        wrapper.eq(!StringUtils.isEmpty(status),SpuInfoEntity::getPublishStatus,status)
+                .eq(!StringUtils.isEmpty(brandId)&&!"0".equalsIgnoreCase(brandId),SpuInfoEntity::getBrandId,brandId)
+                .eq(!StringUtils.isEmpty(catelogId)&&!"0".equalsIgnoreCase(catelogId),SpuInfoEntity::getCatalogId,catelogId);
+
+
+        IPage<SpuInfoEntity> page = this.page(
+                new Query<SpuInfoEntity>().getPage(params),
+                wrapper
+        );
+
+        return new PageUtils(page);
     }
 }

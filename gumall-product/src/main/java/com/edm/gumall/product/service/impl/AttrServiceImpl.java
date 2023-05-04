@@ -56,6 +56,11 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         return new PageUtils(page);
     }
 
+    /**
+     *
+     * //TODO 高级部分完善
+     * @param attr
+     */
     @Transactional
     @Override
     public void saveAttrVo(AttrVo attr) {
@@ -160,8 +165,11 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             attrRespVo.setCatelogPath(categoryService.getPath(catelogId));
             CategoryEntity category = categoryService.getById(catelogId);
             if(category!=null){
-                attrRespVo.setAttrName(category.getName());
+                attrRespVo.setCatelogName(category.getName());
             }
+        }
+        if(!StringUtils.isEmpty(attrEntity.getAttrName())){
+            attrRespVo.setAttrName(attrEntity.getAttrName());
         }
         return attrRespVo;
     }

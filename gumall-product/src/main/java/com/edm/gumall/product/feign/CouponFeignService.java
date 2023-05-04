@@ -1,5 +1,6 @@
 package com.edm.gumall.product.feign;
 
+import com.edm.common.to.SkuReductionTo;
 import com.edm.common.to.SpuBoundTo;
 import com.edm.common.utils.R;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -18,4 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface CouponFeignService {
     @PostMapping("/coupon/spubounds/save")
     R saveSpuBounds(@RequestBody SpuBoundTo spuBoundTo);
+
+    @PostMapping("/coupon/skufullreduction/saveinfo")
+    R saveSkuReduction(@RequestBody SkuReductionTo skuReductionTo);
 }
