@@ -1,5 +1,7 @@
 package com.edm.gumall.ware.service.impl;
 
+import com.alibaba.nacos.client.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -18,9 +20,16 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
+        LambdaQueryWrapper<WareSkuEntity> wrapper = new LambdaQueryWrapper<>();
+        String skuId = (String) params.get("skuId");
+        String wareId = (String) params.get("wareId");
+
+        wrapper.eq(!StringUtils.isEmpty(skuId),WareSkuEntity::getSkuId,skuId);
+        wrapper.eq(!StringUtils.isEmpty(wareId),WareSkuEntity::getWareId,wareId);
+
         IPage<WareSkuEntity> page = this.page(
                 new Query<WareSkuEntity>().getPage(params),
-                new QueryWrapper<WareSkuEntity>()
+                wrapper
         );
 
         return new PageUtils(page);

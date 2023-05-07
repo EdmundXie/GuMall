@@ -14,7 +14,7 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
  * @Email: 609031809@qq.com
  * @Description:
  */
-@Configuration
+//@Configuration
 public class CorsConfig {
 
 //    @Bean

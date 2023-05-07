@@ -47,7 +47,6 @@ public class SysUserController extends AbstractController {
 	 * 所有用户列表
 	 */
 	@GetMapping("/list")
-	@RequiresPermissions("sys:user:list")
 	public R list(@RequestParam Map<String, Object> params){
 		//只有超级管理员，才能查看所有管理员列表
 		if(getUserId() != Constant.SUPER_ADMIN){
@@ -92,7 +91,6 @@ public class SysUserController extends AbstractController {
 	 * 用户信息
 	 */
 	@GetMapping("/info/{userId}")
-	@RequiresPermissions("sys:user:info")
 	public R info(@PathVariable("userId") Long userId){
 		SysUserEntity user = sysUserService.getById(userId);
 		
@@ -108,7 +106,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("保存用户")
 	@PostMapping("/save")
-	@RequiresPermissions("sys:user:save")
 	public R save(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, AddGroup.class);
 		
@@ -123,7 +120,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("修改用户")
 	@PostMapping("/update")
-	@RequiresPermissions("sys:user:update")
 	public R update(@RequestBody SysUserEntity user){
 		ValidatorUtils.validateEntity(user, UpdateGroup.class);
 
@@ -138,7 +134,6 @@ public class SysUserController extends AbstractController {
 	 */
 	@SysLog("删除用户")
 	@PostMapping("/delete")
-	@RequiresPermissions("sys:user:delete")
 	public R delete(@RequestBody Long[] userIds){
 		if(ArrayUtils.contains(userIds, 1L)){
 			return R.error("系统管理员不能删除");

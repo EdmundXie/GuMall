@@ -3,6 +3,7 @@ package com.edm.gumall.ware.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.edm.common.utils.PageUtils;
 import com.edm.gumall.ware.entity.PurchaseEntity;
+import com.edm.gumall.ware.vo.MergeVo;
 
 import java.util.Map;
 
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface PurchaseService extends IService<PurchaseEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    PageUtils queryUnreceivePage(Map<String, Object> params);
+
+    void merge(MergeVo mergeVo);
 }
 
