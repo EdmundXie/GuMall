@@ -3,6 +3,7 @@ package com.edm.gumall.ware.service.impl;
 import com.alibaba.nacos.client.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edm.common.constant.WareConstant;
+import com.edm.gumall.ware.service.WareInfoService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,8 +50,12 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailDao, Pu
 
     @Transactional
     @Override
-    public void updatePurchaseIdAndStatus(List<Long> items, Long purchaseId) {
-        List<PurchaseDetailEntity> collect = items.stream().map((item) -> {
+    public void updatePurchaseIdAndStatusToAssigned(List<Long> items, Long purchaseId) {
+        List<PurchaseDetailEntity> collect = items.stream().filter(id ->{
+            //1. 查当前状态是否是新建状态
+            PurchaseDetailEntity byId = this.getById(id);
+            return byId.getStatus() == WareConstant.PurchaseDetailStatusEnum.CREATED.getCode();
+        }).map((item) -> {
             PurchaseDetailEntity purchaseDetail = new PurchaseDetailEntity();
             purchaseDetail.setId(item);
             purchaseDetail.setPurchaseId(purchaseId);
@@ -58,5 +63,12 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailDao, Pu
             return purchaseDetail;
         }).collect(Collectors.toList());
         this.updateBatchById(collect);
+    }
+
+    @Override
+    public List<PurchaseDetailEntity> getDetailListByPurchaseId(Long id) {
+        LambdaQueryWrapper<PurchaseDetailEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(id!=null,PurchaseDetailEntity::getPurchaseId,id);
+        return this.list(wrapper);
     }
 }

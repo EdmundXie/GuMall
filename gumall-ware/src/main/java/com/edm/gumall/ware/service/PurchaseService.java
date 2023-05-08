@@ -5,6 +5,7 @@ import com.edm.common.utils.PageUtils;
 import com.edm.gumall.ware.entity.PurchaseEntity;
 import com.edm.gumall.ware.vo.MergeVo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,5 +22,7 @@ public interface PurchaseService extends IService<PurchaseEntity> {
     PageUtils queryUnreceivePage(Map<String, Object> params);
 
     void merge(MergeVo mergeVo);
+
+    void received(List<Long> idList);
 }
 

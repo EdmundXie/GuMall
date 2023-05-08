@@ -2,13 +2,17 @@ package com.edm.gumall.ware.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edm.common.constant.WareConstant;
+import com.edm.gumall.ware.entity.PurchaseDetailEntity;
 import com.edm.gumall.ware.service.PurchaseDetailService;
 import com.edm.gumall.ware.vo.MergeVo;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -63,11 +67,37 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
         }
         //2. 在purchaseDetail中更新采购单id
         List<Long> items = mergeVo.getItems();
-        purchaseDetailService.updatePurchaseIdAndStatus(items,purchaseId);
+        purchaseDetailService.updatePurchaseIdAndStatusToAssigned(items,purchaseId);
 
         PurchaseEntity purchase = new PurchaseEntity();
         purchase.setId(purchaseId);
         purchase.setUpdateTime(new Date());
         this.updateById(purchase);
+    }
+
+    @Transactional
+    @Override
+    public void received(List<Long> idList) {
+        //1. 确认当前采购单是已分配状态
+
+        List<PurchaseEntity> collect = idList.stream().map(this::getById).filter(item -> {
+            return item.getStatus() == WareConstant.PurchaseStatusEnum.ASSIGNED.getCode();
+        }).peek(item-> item.setStatus(WareConstant.PurchaseStatusEnum.RECEIVED.getCode())).collect(Collectors.toList());
+
+        //TODO 2. 采购单的采购员是自己
+
+        //3. 改变采购单的状态为正在采购中：WareConstant.PurchaseStatusEnum.RECEIVED
+        this.updateBatchById(collect);
+
+        //4. 改变采购需求的状态为已分配：WareConstant.PurchaseDetailStatusEnum.ASSIGNED
+        List<PurchaseDetailEntity> list = new ArrayList<>();
+        collect.forEach(item->{
+            List<PurchaseDetailEntity> detailListByPurchaseId = purchaseDetailService.getDetailListByPurchaseId(item.getId());
+            detailListByPurchaseId.forEach(PurchaseDetail->{
+                PurchaseDetail.setStatus(WareConstant.PurchaseDetailStatusEnum.PROCUREMENT.getCode());
+            });
+            list.addAll(detailListByPurchaseId);
+        });
+        purchaseDetailService.updateBatchById(list);
     }
 }

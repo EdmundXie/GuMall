@@ -2,6 +2,7 @@ package com.edm.gumall.ware.controller;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.edm.gumall.ware.vo.MergeVo;
@@ -27,6 +28,18 @@ import com.edm.common.utils.R;
 public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
+
+    /**
+     * 领取采购单
+     * /ware/purchase/received
+     * [1,2,3,4]//采购单id
+     */
+    @PostMapping("/received")
+    public R receivePurchase(@RequestBody List<Long> idList){
+        purchaseService.received(idList);
+
+        return R.ok();
+    }
 
     /**
      * 合并采购需求 （purchaseId采购单Id没有时，创建新的采购单

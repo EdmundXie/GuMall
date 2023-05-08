@@ -18,6 +18,8 @@ public interface PurchaseDetailService extends IService<PurchaseDetailEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
 
-    void updatePurchaseIdAndStatus(List<Long> items, Long purchaseId);
+    List<PurchaseDetailEntity> getDetailListByPurchaseId(Long id);
+
+    void updatePurchaseIdAndStatusToAssigned(List<Long> items, Long purchaseId);
 }
 
