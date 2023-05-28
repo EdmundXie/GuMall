@@ -4,7 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.edm.common.constant.WareConstant;
 import com.edm.gumall.ware.entity.PurchaseDetailEntity;
 import com.edm.gumall.ware.service.PurchaseDetailService;
+import com.edm.gumall.ware.service.WareSkuService;
 import com.edm.gumall.ware.vo.MergeVo;
+import com.edm.gumall.ware.vo.PurchaseDetailVo;
+import com.edm.gumall.ware.vo.PurchaseDoneVo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,6 +35,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
     @Resource
     PurchaseDetailService purchaseDetailService;
+
+    @Resource
+    WareSkuService wareSkuService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -99,5 +105,44 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
             list.addAll(detailListByPurchaseId);
         });
         purchaseDetailService.updateBatchById(list);
+    }
+
+    @Transactional
+    @Override
+    public void finish(PurchaseDoneVo purchaseDoneVo) {
+
+        Long purchaseId = purchaseDoneVo.getId();
+        PurchaseEntity purchase = new PurchaseEntity();
+        purchase.setId(purchaseId);
+        purchase.setUpdateTime(new Date());
+        //2. 改变采购单状态
+        //2.1 如果采购项目均已完成，采购单已完成
+        purchase.setStatus(WareConstant.PurchaseStatusEnum.FINISHED.getCode());
+
+        this.updateById(purchase);
+        //1. 改变采购项目状态
+        List<PurchaseDetailVo> items = purchaseDoneVo.getItems();
+        List<PurchaseDetailEntity> collect = items.stream().map(item -> {
+            Integer status = item.getStatus();
+            Long itemId = item.getItemId();
+
+            PurchaseDetailEntity purchaseDetail = new PurchaseDetailEntity();
+            purchaseDetail.setStatus(status);
+            purchaseDetail.setId(itemId);
+
+            //2.2 如果有项目未完成，采购单为异常
+            if (status.equals(WareConstant.PurchaseDetailStatusEnum.ERROR.getCode())) {
+                purchase.setStatus(WareConstant.PurchaseStatusEnum.ERROR.getCode());
+            }
+            else {
+                PurchaseDetailEntity byId = purchaseDetailService.getById(itemId);
+
+                wareSkuService.addStock(byId.getSkuId(),byId.getWareId(),byId.getSkuNum());
+            }
+            return purchaseDetail;
+        }).collect(Collectors.toList());
+        purchaseDetailService.updateBatchById(collect);
+        this.updateById(purchase);
+
     }
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.edm.gumall.ware.vo.MergeVo;
+import com.edm.gumall.ware.vo.PurchaseDoneVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,18 @@ import com.edm.common.utils.R;
 public class PurchaseController {
     @Autowired
     private PurchaseService purchaseService;
+
+    /**
+     * 完成采购单
+     * /ware/purchase/received
+     * [1,2,3,4]//采购单id
+     */
+    @PostMapping("/done")
+    public R finishPurchase(@RequestBody PurchaseDoneVo purchaseDoneVo){
+        purchaseService.finish(purchaseDoneVo);
+
+        return R.ok();
+    }
 
     /**
      * 领取采购单

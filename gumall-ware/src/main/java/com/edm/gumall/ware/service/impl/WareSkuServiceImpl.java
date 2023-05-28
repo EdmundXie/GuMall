@@ -13,6 +13,7 @@ import com.edm.common.utils.Query;
 import com.edm.gumall.ware.dao.WareSkuDao;
 import com.edm.gumall.ware.entity.WareSkuEntity;
 import com.edm.gumall.ware.service.WareSkuService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service("wareSkuService")
@@ -35,4 +36,25 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         return new PageUtils(page);
     }
 
+    @Transactional
+    @Override
+    public void addStock(Long skuId, Long wareId, Integer skuNum) {
+        LambdaQueryWrapper<WareSkuEntity> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(skuId!=null,WareSkuEntity::getSkuId,skuId);
+        wrapper.eq(wareId!=null,WareSkuEntity::getWareId,wareId);
+        WareSkuEntity wareSku = this.getOne(wrapper);
+
+
+        if (wareSku==null){
+            wareSku = new WareSkuEntity();
+            wareSku.setSkuId(skuId);
+            wareSku.setStock(skuNum);
+        }
+        else {
+            wareSku.setStock(skuNum+wareSku.getStock());
+        }
+        wareSku.setWareId(wareId);
+
+        this.saveOrUpdate(wareSku);
+    }
 }

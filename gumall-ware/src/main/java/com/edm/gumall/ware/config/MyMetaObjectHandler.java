@@ -22,6 +22,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
+
         metaObject.setValue("createTime", new Date());
         metaObject.setValue("updateTime",  new Date());
     }
