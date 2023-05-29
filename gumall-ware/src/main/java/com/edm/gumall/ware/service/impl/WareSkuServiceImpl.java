@@ -2,6 +2,9 @@ package com.edm.gumall.ware.service.impl;
 
 import com.alibaba.nacos.client.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.edm.common.utils.Constant;
+import com.edm.common.utils.R;
+import com.edm.gumall.ware.feign.ProductFeignService;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -15,10 +18,14 @@ import com.edm.gumall.ware.entity.WareSkuEntity;
 import com.edm.gumall.ware.service.WareSkuService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 
 @Service("wareSkuService")
 public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> implements WareSkuService {
 
+    @Resource
+    ProductFeignService productFeignService;
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
         LambdaQueryWrapper<WareSkuEntity> wrapper = new LambdaQueryWrapper<>();
@@ -49,6 +56,19 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             wareSku = new WareSkuEntity();
             wareSku.setSkuId(skuId);
             wareSku.setStock(skuNum);
+            wareSku.setStockLocked(0);
+
+            //远程查询skuName
+            try {
+                R info = productFeignService.info(skuId);
+                if(info.getCode()==0) {
+                    Map<String,Object> skuInfo = (Map<String, Object>) info.get("skuInfo");
+                    wareSku.setSkuName((String) skuInfo.get("skuName"));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
         else {
             wareSku.setStock(skuNum+wareSku.getStock());
