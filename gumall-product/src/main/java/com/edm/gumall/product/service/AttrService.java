@@ -3,6 +3,7 @@ package com.edm.gumall.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.edm.common.utils.PageUtils;
 import com.edm.gumall.product.entity.AttrEntity;
+import com.edm.gumall.product.entity.ProductAttrValueEntity;
 import com.edm.gumall.product.vo.AttrRespVo;
 import com.edm.gumall.product.vo.AttrVo;
 
@@ -29,5 +30,7 @@ public interface AttrService extends IService<AttrEntity> {
     void updateAttrVo(AttrVo attr);
 
     PageUtils getAttrPageWithoutThese(Map<String, Object> params,List<Long> ids);
+
+
 }
 

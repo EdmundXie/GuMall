@@ -3,9 +3,7 @@ package com.edm.gumall.product.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.edm.common.constant.ProductConstant;
-import com.edm.gumall.product.entity.AttrAttrgroupRelationEntity;
-import com.edm.gumall.product.entity.AttrGroupEntity;
-import com.edm.gumall.product.entity.CategoryEntity;
+import com.edm.gumall.product.entity.*;
 import com.edm.gumall.product.service.AttrAttrgroupRelationService;
 import com.edm.gumall.product.service.AttrGroupService;
 import com.edm.gumall.product.service.CategoryService;
@@ -26,7 +24,6 @@ import com.edm.common.utils.PageUtils;
 import com.edm.common.utils.Query;
 
 import com.edm.gumall.product.dao.AttrDao;
-import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.service.AttrService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -216,4 +213,6 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         );
         return new PageUtils(page);
     }
+
+
 }

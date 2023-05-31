@@ -1,22 +1,22 @@
 package com.edm.gumall.product.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.edm.gumall.product.entity.ProductAttrValueEntity;
+import com.edm.gumall.product.service.ProductAttrValueService;
 import com.edm.gumall.product.vo.AttrRespVo;
 import com.edm.gumall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.edm.gumall.product.entity.AttrEntity;
 import com.edm.gumall.product.service.AttrService;
 import com.edm.common.utils.PageUtils;
 import com.edm.common.utils.R;
 
+import javax.annotation.Resource;
 
 
 /**
@@ -29,8 +29,24 @@ import com.edm.common.utils.R;
 @RestController
 @RequestMapping("product/attr")
 public class AttrController {
-    @Autowired
+    @Resource
     private AttrService attrService;
+
+    @Resource
+    ProductAttrValueService productAttrValueService;
+
+    /**
+     * 获取spu规格
+     * /product/attr/base/listforspu/{spuId}
+     *
+     */
+    @GetMapping("/base/listforspu/{spuId}")
+    public R baseAttrListForSpu(@PathVariable Long spuId){
+        List<ProductAttrValueEntity> data = productAttrValueService.getAttrList(spuId);
+        return R.ok().put("data",data);
+    }
+
+
     /**
      * 规格参数/销售属性列表
      */
@@ -84,6 +100,17 @@ public class AttrController {
     //@RequiresPermissions("product:attr:update")
     public R update(@RequestBody AttrVo attr){
 		attrService.updateAttrVo(attr);
+
+        return R.ok();
+    }
+
+    /**
+     * 修改spu
+     */
+    @PostMapping("/update/{spuId}")
+    //@RequiresPermissions("product:attr:update")
+    public R updateSpuAttr(@PathVariable Long spuId,@RequestBody List<ProductAttrValueEntity> entities){
+        productAttrValueService.updateSpuAttr(spuId,entities);
 
         return R.ok();
     }
